@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>EDSOFT</title>
+    </h:head>
+    <h:body>
+        <h:form id="frm">
+            <p:dataTable id="list" widgetVar="dt" value="#{rapor2.fileList}"  selection="#{rapor2.deletedFile}" filteredValue="#{rapor2.filtered}" rowKey="#{t.name}" var="t" draggableColumns="true"  >
+                <p:ajax event="filter" listener="#{rapor2.size()}" update=":frm:count" />
+                <f:facet name="header">
+                    <h:outputText value="Teknosa Dosya Bilgileri" />
+                </f:facet>
+                <p:column selectionMode="multiple" />
+                <p:column filterBy="#{t.parentFile.parentFile.parentFile.parentFile.name}" sortBy="#{t.parentFile.parentFile.parentFile.parentFile.name}" >
+                    <f:facet name="header">
+                        <h:outputText value="Ürün Ailesi" />
+                    </f:facet>
+                    <h:outputText value="#{t.parentFile.parentFile.parentFile.parentFile.name}" />
+                </p:column>
+                <p:column filterBy="#{t.parentFile.parentFile.parentFile.name}" sortBy="#{t.parentFile.parentFile.parentFile.name}" >
+                    <f:facet name="header">
+                        <h:outputText value="Ürün Tipi" />
+                    </f:facet>
+                    <h:outputText value="#{t.parentFile.parentFile.parentFile.name}" />
+                </p:column>
+                <p:column filterBy="#{t.parentFile.parentFile.name}" sortBy="#{t.parentFile.parentFile.name}">
+                    <f:facet name="header">
+                        <h:outputText value="Ürün Marka" />
+                    </f:facet>
+                    <h:outputText value="#{t.parentFile.parentFile.name}" />
+                </p:column>
+                <p:column filterBy="#{t.parentFile.name}" sortBy="#{t.parentFile.name}">
+                    <f:facet name="header">
+                        <h:outputText value="Ürün Döküman" />
+                    </f:facet>
+                    <h:outputText value="#{t.parentFile.name}" />
+                </p:column>
+                <p:column filterBy="#{t.name}" sortBy="#{t.name}" >
+                    <f:facet name="header">
+                        <h:outputText value="Dosya Adı" />
+                    </f:facet>
+                    <h:outputText value="#{t.name}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Dosya Düzenleme Saati" />
+                    </f:facet>
+                    <h:outputText value="#{t.lastModified()}">
+                        <f:convertDateTime pattern="HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column filterBy="#{t.lastModified()}" sortBy="#{t.lastModified()}">
+                    <f:facet name="header">
+                        <h:outputText value="Dosya Düzenleme Tarihi" />
+                    </f:facet>
+                    <h:outputText value="#{t.lastModified()}">
+                        <f:convertDateTime locale="tr" />
+                    </h:outputText>
+                </p:column>
+                <f:facet name="footer" >
+                    <p:commandButton process="list" update=":frm:sil" value="SİL" oncomplete="PF('dlt').show()" />
+                    <p:commandButton process="list" update=":frm:silt" value="TÜMÜNÜ SİL" oncomplete="PF('dltt').show()" />
+                </f:facet>
+            </p:dataTable>
+            <p:panel  header="PDF ve Excel Export">
+                <p:commandLink id="pdf" ajax="false">  
+                    <h:outputLabel value="PDF"/>  
+                    <pe:exporter type="pdf" target="list" fileName="TeknosaDosyaBilgileri"  
+                                 datasetPadding="4"/>  
+                </p:commandLink>  
+
+                <p:spacer width="20"/>  
+
+                <p:commandLink id="xlsx" ajax="false">
+                    <p:outputLabel value="EXCEL" />
+                    <pe:exporter type="xlsx" target="list"
+                                 fileName="Teknosa Dosya Bilgileri" tableTitle="Dosya Bilgileri"
+                                 cellFontStyle="NORMAL" />
+                </p:commandLink>
+
+                <p:spacer width="20"/> 
+
+                <p:outputLabel id="count" value="Toplam Dosya Sayısı : #{rapor2.filtered.size()}" />
+            </p:panel>  
+            <p:dialog header="SİL" widgetVar="dlt" modal="true" showEffect="fade" closable="true" >
+                <p:outputPanel id="sil" style="text-align: center;" >
+                    <ui:repeat value="#{rapor2.deletedFile}" var="del">
+                        <h:outputText value="#{del}" />
+                    </ui:repeat>
+                </p:outputPanel>
+                <p:commandButton value="Sil" actionListener="#{rapor2.delete()}" oncomplete="PF('dlt').hide()" update=":frm:list" />
+            </p:dialog>
+            <p:dialog header="TÜMÜNÜ SİL" widgetVar="dltt" modal="true" showEffect="fade" closable="true" >
+                <p:outputPanel id="silt" style="text-align: center;">
+                    <ui:repeat value="#{rapor2.deletedFile}" var="del">
+                        <h:outputText value="#{del}" />
+                    </ui:repeat>
+                </p:outputPanel>
+                <p:commandButton value="Sil" actionListener="#{rapor2.delete()}" oncomplete="PF('dltt').hide()" update=":frm:list" />
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+

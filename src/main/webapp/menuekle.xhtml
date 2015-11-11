@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>EDSOFT</title>
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true" rendered="#{login.onSession()}">
+            <p:layoutUnit position="north" style="text-align: center;">
+                <h:graphicImage name="teknosa.jpg" library="img" style="float: left;" />
+                <h:outputText value="EDSOFT TEKNOSA PROJESİ" />
+            </p:layoutUnit>
+            <p:layoutUnit position="center" >
+                <h:form>
+                    <p:growl id="menuGrowl" showDetail="true" life="6000" />
+                    <p:panel>
+                        <p:panelGrid columns="4">
+                            <p:outputLabel for="familyLabel" value="Ürün Ailesi Giriniz" />
+                            <p:autoComplete id="familyLabel" value="#{addMenuBean.familyLabel}" completeMethod="#{addMenuBean.autoFamily}" required="true" requiredMessage="Ürün Ailesi Eklemediniz" >
+                                <p:ajax event="itemSelect" listener="#{addMenuBean.selectFamily}" update="familyId" />
+                            </p:autoComplete>
+                            <p:outputLabel for="familyId" value="Ürün Ailesi ID Giriniz" />
+                            <p:inputText id="familyId" value="#{addMenuBean.familyId}" required="true" requiredMessage="Ürün Ailesi Eklemediniz"  />
+                            
+                            <p:outputLabel for="typeLabel" value="Ürün Tipi Giriniz" />
+                            <p:autoComplete id="typeLabel" value="#{addMenuBean.typeLabel}" completeMethod="#{addMenuBean.auto1Types}" required="true" requiredMessage="Ürün Tipi Eklemediniz" >
+                                <p:ajax event="itemSelect" listener="#{addMenuBean.selectTypes}" update="typeId" />
+                            </p:autoComplete>
+                            <p:outputLabel for="typeId" value="Ürün Tipi ID Giriniz" />
+                            <p:inputText id="typeId" value="#{addMenuBean.typeId}" required="true" requiredMessage="Ürün Tipi Eklemediniz" />
+                            
+                            <p:outputLabel for="brandLabel" value="Ürün Markası Giriniz" />
+                            <p:autoComplete id="brandLabel" value="#{addMenuBean.brandLabel}" completeMethod="#{addMenuBean.autoBrand}" required="true" requiredMessage="Ürün Markası Eklemediniz" >
+                                <p:ajax event="itemSelect" listener="#{addMenuBean.selectBrand}" update="brandId" />
+                            </p:autoComplete>
+                            <p:outputLabel for="brandId" value="Ürün Marka ID Giriniz" />
+                            <p:inputText id="brandId" value="#{addMenuBean.brandId}" required="true" requiredMessage="Ürün Markası Eklemediniz" />
+                            
+                            <p:outputLabel for="documentLabel" value="Ürün Dökümanı Giriniz" />
+                            <p:autoComplete id="documentLabel" value="#{addMenuBean.documentLabel}" completeMethod="#{addMenuBean.autoDocument}" required="true" requiredMessage="Ürün Dökümanı Eklemediniz"  >
+                                <p:ajax event="itemSelect" listener="#{addMenuBean.selectDocument}" update="documentId" />
+                            </p:autoComplete>
+                            <p:outputLabel for="documentId" value="Ürün Döküman ID Giriniz" />
+                            <p:inputText id="documentId" value="#{addMenuBean.documentId}" required="true" requiredMessage="Ürün Dökümanı Eklemediniz" />
+                        </p:panelGrid>
+                        <p:commandButton value="Ekle" action="#{addMenuBean.addMenu()}" update="menuGrowl" />
+                    </p:panel>
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>
+
